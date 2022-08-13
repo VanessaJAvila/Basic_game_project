@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Histórico</title>
+</head>
+<script src="localStorage.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<style>
+
+    body {
+        text-align: center;
+        margin-top: 10px;
+        font-family: Arial, Helvetica, sans-serif;
+        flex-direction: column;
+    }
+
+    .logo {
+        margin-bottom: 30px;
+    }
+
+    button {
+        background-color: white;
+        font-size: 25px;
+        text-align: center;
+        color: #757474;
+        width: 501px;
+        padding: 15px;
+        border: 2px solid grey;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-bottom: 20px;
+    }
+
+    .containerH {
+        display: flex;
+        overflow-y: scroll;
+        width: 513px;
+        max-height: 422px;
+        margin: auto;
+    }
+
+    .historyItemClass {
+        display: inline-flex;
+        align-content: space-evenly;
+        background-color: white;
+        font-size: 25px;
+        text-align: center;
+        color: #757474;
+        width: 450px;
+        max-height: 100px;
+        padding: 21px;
+        margin-bottom: 22px;
+        border: 2px solid grey;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .game-timeData, .game-playerData {
+        width: 228px;
+        height: 75px;
+    }
+    p{
+        margin-top:0;
+        margin-bottom: 0;
+    }
+    .level{
+        margin-left: 19px;
+    }
+    .time{
+        margin-left: 1px;
+    }
+
+
+</style>
+<body>
+<img src="imagens/imagemjgo.png" class="logo" alt="logo jogo">
+<div class="historic">
+
+    <a href="menu.html">
+        <button type="button" id="backToMenu">VOLTAR</button>
+    </a>
+
+    <div class="containerH">
+        <div id="historyItems">
+
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    let historyItems = $("#historyItems");
+    let currentHistory = JSON.parse(localStorage.getItem("history") || "[]");
+    currentHistory.forEach(game => {
+        if (game.game_name === "Jogo da Memória") {
+            historyItems.append(`<div class="historyItemClass">
+            <div class ="game-playerData"><p>${game.date}</p><p>${game.game_name}</p></div>
+            <div class="game-timeData"><p>Jogador: ${game.winner}</p>
+            <p class="level">Nivel: ${game.level}</p><p class="time">Tempo: ${game.time}</p></div></div>`)
+        }
+        if (game.game_name === "Jogo do Galo" || game.game_name === "Quatro em Linha") {
+            historyItems.append(`<div class="historyItemClass">
+            <div class="game-timeData"><p>${game.game_name} ${game.date}</p></div>
+            <div class ="game-playerData"><p>Vencedor: ${game.winner}</p></div></div>`)
+
+
+        }
+    })
+</script>
+</html>

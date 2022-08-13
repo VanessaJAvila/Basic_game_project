@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jogo do Galo</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="localStorage.js"></script>
+    <style>
+        h1 {
+            color: lightgray;
+            align-content: center;
+            text-align: center;
+        }
+        /*
+        reiniciar {
+            width:200px;
+            height:100px;
+            border: 1px solid black;
+            border-radius:10px;
+            margin-top: 5px;
+
+        }
+*/
+        #timer {
+            font-size: 50px;
+            color: lightgrey;
+            align-content: center;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 50px;
+        }
+
+        .tr-border {
+            border-bottom: 1px solid black;
+        }
+
+        .td-border {
+            border-right: 1px solid black;
+        }
+
+        td {
+            width: 100px;
+            height: 100px;
+            text-align: center;
+        }
+
+
+    </style>
+</head>
+<body>
+
+<h1>Jogo do Galo</h1>
+<div id="timer">
+    <span id="minutes"></span>:<span id="seconds"></span>
+</div>
+<div id="menu">
+
+    <input type="text" id="nomeX" name="name" placeholder="jogador1">
+    <label id="pontosX"></label>
+    <p></p>
+    <input type="text" id="nomeO" name="name" placeholder="jogador2">
+    <label id="pontosO"></label>
+    <p></p>
+    <input type="button" id="start" value="Começar">
+    <p></p>
+    <!--Criei uma caixa com uma tabela, onde está guardado o resultado de cada jogador -->
+</div>
+<div class="players">
+    <table>
+        <tr>
+            <td>
+                <span id="player1"></span>
+            </td>
+            </td>
+            <td>
+                <span id="player2"></span>
+            </td>
+        </tr>
+    </table>
+
+
+</div>
+
+</div>
+<table id="jogo" style="display: none">
+    <tr class="tr-border">
+        <td id="celula0" class="td-border"></td>
+        <td id="celula1" class="td-border"></td>
+        <td id="celula2" class="td-"></td>
+
+    </tr>
+    <tr class="tr-border">
+        <td id="celula3" class="td-border"></td>
+        <td id="celula4" class="td-border"></td>
+        <td id="celula5" class="td-"></td>
+    </tr>
+    <tr>
+        <td id="celula6" class="td-border"></td>
+        <td id="celula7" class="td-border"></td>
+        <td id="celula8" class="td-"></td>
+    </tr>
+
+</table>
+<a href="menu.html">
+    <button type="button" id="backToMenu">Menu</button>
+
+<div class="bola"></div>
+<div class="cruz"></div>
+<!-- Mudança do botão do registo dos jogadores, X e O, com apenas um botão. Também
+foi feito, o ligar o relógio, apenas quando há o registo dos jogadores, apenas quando é acionado o botão Começar.
+Entretanto, foi mudado o nome dos jogadores, para player1 e player2, e o valor
+deles acomulado. Queremos ainda, fazer com que o jogo termine quando um
+dos dois jogadores vence a partida.
+# foi criada a função starTime, que controla o inicio do tempo, apenas quando
+o botão Começar, é acionado.-->
+
+</body>
+<script>
+
+    let second = 0;
+    function startTime() {
+        function pad(value) {
+            return value > 9 ? value : "0" + value;
+        }
+
+        setInterval(function () {
+            $("#seconds").html(pad(++second % 60));
+            $("#minutes").html(pad(parseInt(second / 60, 10)));
+        }, 1000);
+    }
+    /*
+    # Foi criada uma função para fazer com que o tabuleiro, definido como
+    (jogo), apareça escondido no início do jogo, permitindo
+    estar apenas visivel o espaço para registo dos jogadores, e o botão de
+    Começar.Depois de escrever o nome de cada jogador, o jogo vai começar,
+    e ao clicar no botão, o menu de registo desaparece e aparece o tabuleiro
+    de jogo. Através da função game e menu, fazemos aparecer e desaparecer
+    usando o game.show e o menu hide*/
+
+    let game = $("#jogo")
+    let menu = $("#menu")
+    function showGame() {
+        game.show()
+        menu.hide()
+    }
+    /*
+    #com esta variável, é controlado o início da contagem do tempo, através
+    do botão Começar. Quer dizer que ao fazermos o clic no botão, guardamos
+    os nomes dos jogadores, fazemos o começo do tempo e fazemos aparecer
+    o tabuleiro de jogo.
+    */
+
+    let startButton = $("#start");
+    startButton.click(function () {
+        guardarNomes();
+        startTime();
+        showGame();
+        sortearPrimeiroJogador();
+    })
+    /*
+    #Da mesma maneira, foram criadas duas variáveis, que guardam os nomes dos
+    dos jogadores.
+    */
+    let player1Nome;
+    let player2Nome;
+    /* Aqui foi criada uma função que guarda o nome dos jogadores assim como
+    * o valor acumulado de cada jogador, através do val(). Nota que também
+    * acabámos por passar o elemento para o jquery.*/
+    function guardarNomes() {
+        player1Nome = $("#nomeX").val();
+        player2Nome = $("#nomeO").val();
+
+        console.log(player1Nome.value, player2Nome.value)
+        $("#player1").text(player1Nome + ": " + pontosX);
+        $("#player2").text(player2Nome + ": " + pontosO);
+    }
+    /* Esta função permite visualizar os pontos de cada jogador
+    */
+    function mostrarPontos() {
+        $("#player1").text(player1Nome + ": " + pontosX);
+        $("#player2").text(player2Nome + ": " + pontosO);
+    }
+
+    let pontosX = 0;
+    let pontosO = 0;
+    let rondas = 0;
+    /*
+#Foi substituido o conjunto das celulas por um For, que engloba
+o conjunto das celulas definida desde a celula0 á celula8. Desta maneira,
+reduzimos a quantidade de código escrito. Também já atualizamos a função para
+jogadorAtual, na medida em que as peças são colocadas no tabuleiro, pela ordem do jogador que tem a vez de jogar.
+Alternando entre o jogador que tem a vez e o jogador que joga depois. No tabuleiro, já aparece a possibilidade de jogar alternadamente.
+# criámos esta função, quesorteia o jogador que começa a jogar, aleatóriamente.*/
+    function sortearPrimeiroJogador () {
+        let r = Math.random();
+        if(r > 0.5) {
+            return "X";
+        }
+        return "O";
+    }
+    let jogadorAtual = "X";
+    let numeroJogadas = 0;
+    for (let i = 0; i < 9; i++) {
+        let celula = $("#celula" + i);
+        celula.click(function () {
+            if (celula.text() !== "") {
+                alert("casa ocupada!");
+                return;
+            }
+            celula.text(jogadorAtual);
+            numeroJogadas++;
+            setTimeout(() => {
+                jogada();
+
+                if (jogadorAtual === "X") {
+                    jogadorAtual = "O"
+                } else {
+                    jogadorAtual = "X"
+                    if(numeroJogadas === 9){
+                        alert("jogo terminado");
+                        return;
+                    }
+                }
+            }, 10);
+        });
+
+
+    }
+    /*
+    A função clearGrid, permite limpar o tabuleiro no final de cada jogo.
+    impedindo que se possa continuar a jogar, depois de um jogador vencer a partida.
+    # Incluí a possibilidade de mostrar os pontos no final de cada jogo.
+    # Incluí a possibilidade de o relógio recomeçar quando o tabuleiro é limpo.
+    # Incluí a verificação do numero de rondas vencidas por cada jogador */
+    function clearGrid(){
+        $("#celula0").text("");
+        $("#celula1").text("");
+        $("#celula2").text("");
+        $("#celula3").text("");
+        $("#celula4").text("");
+        $("#celula5").text("");
+        $("#celula6").text("");
+        $("#celula7").text("");
+        $("#celula8").text("");
+
+        numeroJogadas = 0;
+        rondas = rondas + 1;
+        if (rondas == 5) {
+            if (pontosX > pontosO) {
+                alert("Parabéns " + player1Nome + " ganhou a Ronda");
+                updateHistory("Jogo do Galo", player1Nome, second);
+
+            } else if (pontosO > pontosX) {
+                alert("Parabéns " + player2Nome + " ganhou a Ronda");
+                updateHistory("Jogo do Galo", player2Nome, second);
+            } else {
+                alert("Ronda empatada!");
+                updateHistory("Jogo do Galo", "Empate técnico", second);
+            }
+
+            console.log(localStorage.getItem("history"));
+            pontosX = 0;
+            pontosO = 0;
+            rondas = 0;
+            second = 0;
+        }
+
+        mostrarPontos();
+    }
+    /*
+#Aqui, definimos o código com a função que permite igualar três casas seguidas,
+originando a vitória do jogo por parte do jogador que consegue esse feito,
+primeiramente.
+É feita a verificação do conteudo das células, para verificar se é igual,
+caso seja igual, o jogador com essa marca, ganha.
+ */
+
+    function jogada() {
+
+        if ($("#celula0").text() == $("#celula1").text() &&
+            $("#celula1").text() == $("#celula2").text()
+            && $("#celula2").text() != ""
+        ) {
+            alert("Parabéns ganhou o jogador " + jogadorAtual);
+            if (jogadorAtual == "X") {
+                pontosX = pontosX + 1;
+            } else {
+                pontosO = pontosO + 1;
+            }
+            clearGrid();
+            return;
+        }
+        if ($("#celula3").text() == $("#celula4").text() &&
+            $("#celula4").text() == $("#celula5").text()
+            && $("#celula5").text() != ""
+        ) {
+            alert("Parabéns ganhou o jogador " + jogadorAtual);
+            if (jogadorAtual == "X") {
+                pontosX = pontosX + 1;
+            } else {
+                pontosO = pontosO + 1;
+            }
+            clearGrid();
+            return;
+        }
+        if ($("#celula6").text() == $("#celula7").text() &&
+            $("#celula7").text() == $("#celula8").text()
+            && $("#celula8").text() != ""
+        ) {
+            alert("Parabéns ganhou o jogador " + jogadorAtual);
+            if (jogadorAtual == "X") {
+                pontosX = pontosX + 1;
+            } else {
+                pontosO = pontosO + 1;
+
+
+            }
+            clearGrid();
+            return;
+        }
+        if ($("#celula0").text() == $("#celula3").text() &&
+            $("#celula3").text() == $("#celula6").text()
+            && $("#celula6").text() != ""
+        ) {
+            alert("Parabéns ganhou o jogador " + jogadorAtual);
+            if (jogadorAtual == "X") {
+                pontosX = pontosX + 1;
+            } else {
+                pontosO = pontosO + 1;
+            }
+            clearGrid();
+            return;
+        }
+        if ($("#celula1").text() == $("#celula4").text() &&
+            $("#celula4").text() == $("#celula7").text()
+            && $("#celula7").text() != ""
+        ) {
+            alert("Parabéns ganhou o jogador " + jogadorAtual);
+            if (jogadorAtual == "X") {
+                pontosX = pontosX + 1;
+
+            } else {
+                pontosO = pontosO + 1;
+
+            }
+            clearGrid();
+            return;
+        }
+        if ($("#celula2").text() == $("#celula5").text() &&
+            $("#celula5").text() == $("#celula8").text()
+            && $("#celula8").text() != ""
+        ) {
+            alert("Parabéns ganhou o jogador " + jogadorAtual);
+            if (jogadorAtual == "X") {
+                pontosX = pontosX + 1;
+
+            } else {
+                pontosO = pontosO + 1;
+
+            }
+            clearGrid();
+            return;
+        }
+        if ($("#celula0").text() == $("#celula4").text() &&
+            $("#celula4").text() == $("#celula8").text()
+            && $("#celula8").text() != ""
+        ) {
+            alert("Parabéns ganhou o jogador " + jogadorAtual);
+            if (jogadorAtual == "X") {
+                pontosX = pontosX + 1;
+
+            } else {
+                pontosO = pontosO + 1;
+
+            }
+            clearGrid();
+            return;
+        }
+        if ($("#celula2").text() == $("#celula4").text() &&
+            $("#celula4").text() == $("#celula6").text()
+            && $("#celula6").text() != ""
+        ) {
+            alert("Parabéns ganhou o jogador " + jogadorAtual);
+            if (jogadorAtual == "X") {
+                pontosX = pontosX + 1;
+
+            } else {
+                pontosO = pontosO + 1;
+
+            }
+            clearGrid();
+        }
+        /* Aqui verificamos que ao contar as jogadas que vão sendo feitas, ao diminuir
+        o numero de casas vazias, de 0-9, permite verificar quando haverá um empate.
+        Ou seja, se as 9 casas estiverem preenchidas e não houver um vencedor, quer
+        dizer que os jogadores empataram. Surje um alerta que confirma o empate.
+        */
+        console.log("numeroJogadas: " + numeroJogadas);
+        if (numeroJogadas === 9) {
+            alert("empate!");
+            clearGrid();
+        }
+
+    }
+</script>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="localStorage.js"></script>
+
+
+    <title>Jogo da Memória</title>
+    <style>
+
+        body {
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            font-size: 14pt;
+            color: dimgrey;
+            align-content: center;
+            text-align: center;
+        }
+        h1{
+            margin-top: 1px;
+            margin-bottom: 0;
+        }
+
+        input {
+            width: 350px;
+            height: 50px;
+            margin: auto;
+            margin-left: 50px;
+            text-align: center;
+            color: lightgrey;
+            border-color: grey;
+            cursor: pointer;
+        }
+
+        button {
+            width: 350px;
+            height: 50px;
+            justify-content: space-between;
+            margin: auto;
+            border-color: lightgrey;
+            border-radius: 15px;
+            color: dimgrey;
+            background: white;
+            cursor: pointer;
+        }
+
+        .memory-game {
+            margin: -14px;
+            padding-bottom: 100px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        #timer {
+            margin-bottom: 10px;
+        }
+
+        .game-line {
+            display: flex;
+            justify-content: center;
+        }
+
+        .game-place {
+            width: 100px;
+            height: 100px;
+            border: 3px solid dimgrey;
+            margin: 10px;
+        }
+
+        .game-img {
+            width: 100px;
+            height: 100px;
+        }
+
+        .game-img.hidden {
+            display: none;
+        }
+
+        div.popUpMenu{
+            width: 500px;
+            height: 200px;
+            border: 2px solid dimgray;
+            margin: auto;
+            border-radius: 15px;
+            background: white;
+            display:flex;
+            flex:1;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            position: absolute;
+
+        }
+          a{
+             text-decoration: none;
+              color: dimgrey;
+          }
+
+         div.popUpMenu >p {
+             font-size: 30px;
+             margin: 0;
+         }
+
+        div.popUpMenu > button {
+            width: 400px;
+            height: 50px;
+            border: 2px solid dimgray;
+            border-radius: 15px;
+            font-size: 20px;
+            margin: 0;
+        }
+        .popUp-container {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        a{
+
+        margin-left :41px;
+        }
+
+        #backToMenu {
+            margin-top: 13px;
+
+        }
+
+    </style>
+
+</head>
+<body>
+
+<header>
+
+    <h1 class="GameId">Jogo da Memória</h1>
+
+</header>
+
+<section>
+
+    <div id="menu">
+        <p>Quem está a jogar?</p>
+        <input type="text" required minlength="3" placeholder="Nome" id="playerName">
+        <br>
+        <p>Escolher grelha</p>
+        <ul>
+            <button type="button" class="level1">Fácil 3 x 4</button>
+        </ul>
+        <ul>
+            <button type="button" class="level2">Médio 4 x 4</button>
+        </ul>
+        <ul>
+            <button type="button" class="level3">Difícil 4 x 5</button>
+        </ul>
+    </div>
+</section>
+
+
+
+<div id="timer" style="display: none">
+    <span id="minutes">00</span>:<span id="seconds">00</span>
+</div>
+
+<div class="memory-game">
+    <a href="menu.html">
+        <button type="button" id="backToMenu">Menu</button>
+
+</div>
+<div class="popUp-container">
+    <div class='popUpMenu'></div>
+</div>
+
+</body>
+<script src="MemoryGame.js"></script>
+</html>

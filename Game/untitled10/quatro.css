@@ -1,0 +1,149 @@
+.container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-family: Arial;
+}
+
+body, html {
+    margin: 0;
+    height: 100%;
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+.title {
+    font-size: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #757474;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+}
+
+.menu {
+    text-align: center;
+    font-size: 25px;
+    color: #757474;
+    border-radius: 2px;
+    margin-top: 100px;
+}
+
+.menu p {
+    margin: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+input {
+    background-color: white;
+    font-size: 25px;
+    text-align: center;
+    color: #757474;
+    width: 450px;
+    padding: 15px;
+    border: 2px solid grey;
+}
+
+.versus {
+    margin-top: 100px;
+    margin-bottom: 10px;
+}
+
+button {
+    background-color: white;
+    font-size: 25px;
+    color: #757474;
+    width: 485px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+    border: 2px solid grey;
+    border-radius: 8px;
+    margin-top: 40px;
+    cursor: pointer;
+}
+
+
+#timer {
+    font-size: 25px;
+    color: lightgrey;
+    align-content: center;
+    text-align: center;
+}
+
+
+#board {
+    height: 540px;
+    width: 630px;
+    background-color: lightgrey;
+    border-radius: 20px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.hole {
+    height: 70px;
+    width: 70px;
+    margin: 5px;
+    /* css dos círculos */
+    background-color: white;
+    border-radius: 50%;
+    border: 5px solid lightgrey;
+}
+
+/* peças do jogador 1 e 2 */
+.red-piece {
+    background-color: #c20707;
+}
+
+.yellow-piece {
+    background-color: #e0e005;
+}
+
+.displayNone {
+    display: none;
+}
+
+.players {
+    display: flex;
+    justify-content: space-between;
+    width: 670px;
+    margin: 0 auto;
+    font-size: 25px;
+}
+
+/* Estilo aplicado aos elementos
+ com classe playing dentro do .players */
+.players .playing {
+    border: 1px solid green;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    padding: 5px 10px;;
+}
+
+.containerW {
+    position: fixed;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    justify-content: center;
+    align-content: center;
+
+}
+
+.winnerWindow {
+    display: flex;
+    height: 300px;
+    width: 500px;
+    margin: auto;
+    flex-direction: column;
+    background-color: #ffffff;
+    border: 2px solid darkgray;
+    border-radius: 5px;
+    color: lightgrey;
+
+}
+
