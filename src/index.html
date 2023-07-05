@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Menu</title>
+</head>
+<style>
+
+    body {
+        text-align: center;
+        margin-top: 10px;
+        flex-direction: column;
+    }
+
+    button {
+        background-color: white;
+        font-size: 25px;
+        text-align: center;
+        color: #757474;
+        width: 450px;
+        padding: 15px;
+        border: 2px solid grey;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+
+</style>
+<body>
+<img src="../imagens/imagemjgo.png" alt="logo jogo">
+<div class="theMenu">
+    <ul>
+        <a href="quatro.html">
+            <button type="button" id="quatro em linha">Quatro em Linha</button>
+        </a>
+    </ul>
+    <ul>
+        <a href="FinalMemoryGame.html">
+            <button type="button" id="jogo da memória">Jogo da Memória</button>
+        </a>
+    </ul>
+    <ul>
+        <a href="historico.html">
+            <button type="button" id="historico">Histórico de Jogos</button>
+        </a>
+    </ul>
+</div>
+</body>
+<script>
+    if (!localStorage.getItem("history")) {
+
+        localStorage.setItem("history", JSON.stringify(
+            []
+        ))
+    }
+</script>
+</html>
